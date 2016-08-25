@@ -1,95 +1,772 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+  <head>
+    <meta charset="utf-8">
 
-		<title>Decorate the World</title>
+    <title>Decorate the World</title>
 
-		<meta name="description" content="description">
-		<meta name="author" content="Nicholas Mackey">
+    <meta name="description" content="description">
+    <meta name="author" content="Nicholas Mackey">
 
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
 
-		<!-- Code syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
 
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
-	</head>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
 
-	<body>
+  <body>
 
-		<div class="reveal">
+    <div class="reveal">
 
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
-				<section>
-					<h1>Decorate the World</h1>
-					<h3>Adding a little style to your project</h3>
-					<p>
-						<small>Created by Nicholas Mackey</small>
-					</p>
-					<p>
-						<small>Web: <a href="http://nmackey.com">nmackey.com</a> / Twitter: <a href="http://twitter.com/nicholas_mackey">@nicholas_mackey</a> / Github: <a href="http://github.com/nmackey">nmackey</a></small>
-					</p>
-				</section>
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <section>
+            <h1>Decorate the world</h1>
+            <p>
+              <small>By: Nicholas Mackey</small>
+            </p>
+            <aside class="notes">
+              Who is already using decorators?<br>
+              How many people have written their own?<br>
+            </aside>
+          </section>
 
-				<section>
-					<h1>THE END</h1>
-					<p>
-						<small>Presentation online at <a href="http://nmackey.com/presentation-decorators/">nmackey.com/presentation-decorators/</a></small>
-						<small>Slides available at <a href="http://github.com/nmackey/presentation-decorators">github.com/nmackey/presentation-decorators</a></small>
-					</p>
-				</section>
+          <section>
+            <h2>Outline</h2>
+            <ul>
+              <li class="fragment">What decorators are</li>
+              <li class="fragment">How can we use them today</li>
+              <li class="fragment">Short story</li>
+              <li class="fragment">Decorator examples</li>
+              <li class="fragment">Lessons learned</li>
+            </ul>
+            <aside class="notes">
+            </aside>
+          </section>
+        </section>
 
-			</div>
+        <section>
+          <section>
+            <h2>What are Javascript Decorators?</h2>
+            <div class="fragment">
+              Look something like this:
+              <pre><code data-trim data-noescape>
+                @someDecorator
+              </code></pre>
+            </div>
+            <div class="fragment">
+              From core-decorators library...
+              <pre><code data-trim data-noescape>
+                @autobind
+              </code></pre>
+            </div>
+            <div class="fragment">
+              From Angular 2 framework...
+              <pre><code data-trim data-noescape>
+                @NgModule()
+              </code></pre>
+            </div>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <blockquote>Decorators offer a convenient declarative syntax to modify the shape of class declarations.</blockquote>
+            <small>From the decorators draft spec (Yehuda Katz, Brian Terlson)</small>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>A decorator is:</h2>
+            <ul>
+              <li class="fragment">an expression</li>
+              <li class="fragment">that evaluates to a function</li>
+              <li class="fragment">that takes 3 arguments: target, name, and descriptor (same signature as Object.defineProperty)
+                <pre><code data-trim data-noescape>
+                  function(target, name, descriptor){}
+                </code></pre>
+              </li>
+              <li class="fragment">and optionally returns a decorator descriptor to install on the target object</li>
+            </ul>
+          </section>
+          <section>
+            <h2>They are sugar.</h2>
+            <p>There isn't anything you can do with decorators that you can't already do.</p>
+            <p class="fragment">But they make your life better :)</p>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Current state of decorators</h2>
+            <p class="fragment">in flux...</p>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Stage 2</h2>
+            <a href="http://tc39.github.io/proposal-decorators/">Decorator Proposal</a>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>caniuse?</h2>
+            <p class="fragment">Babel 5 <span class="fragment">(decorators in)</span></p>
+            <p class="fragment">Babel 6 <span class="fragment"><a href="http://babeljs.io/docs/plugins/transform-decorators/">(decorators out)</a></span></p>
+            <p class="fragment">But <a href="http://github.com/jkrems/babel-plugin-transform-decorators-stage-2-initial">almost</a> back?</p>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>So now what?</h2>
+            <p class="fragment">You can use the <a href="http://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy">'legacy'</a> plugin to get support for the <a href="https://github.com/wycats/javascript-decorators">original</a> spec now</p>
+            <p class="fragment">This is where we will focus.</p>
+            <aside class="notes">
+            </aside>
+          </section>
+        </section>
 
-		</div>
+        <section>
+          <section>
+            <h2>How can we use decorators today?</h2>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Babel Setup</h2>
+            <pre><code data-trim data-noescape>
+              npm install --save-dev babel-plugin-transform-decorators-legacy
+            </code></pre>
+            <p>.babelrc</p>
+            <pre><code data-trim data-noescape>
+{
+  "presets": [ "es2015" ],
+  "plugins": [
+    "transform-decorators-legacy", // before class-properties
+    "transform-class-properties" // optional
+  ]
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Example:</h2>
+            <pre class="fragment"><code data-trim data-noescape>
+import { readonly } from 'decorators';
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+class Test {
+  @readonly
+  grade = 'B';
+}
 
-		<script>
+const mathTest = new Test();
+mathTest.grade = A;
+// Uncaught TypeError: Cannot assign to read only property 'grade'...
+            </code></pre>
+            <pre class="fragment"><code data-trim data-noescape>
+export function readonly(target, name, descriptor){
+  descriptor.writable = false;
+  return descriptor;
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>Parts of a decorator:</h2>
+            <pre><code data-trim data-noescape>
+              function(target, name, descriptor){}
+            </code></pre>
+          </section>
+          <section>
+            <h2>target</h2>
+            <h3>this is the thing you are decorating</h3>
+            <ul>
+              <li class="fragment">For classes this will be the class constructor</li>
+              <li class="fragment">For methods/properties this will be the prototype</li>
+            </ul>
+          </section>
+          <section>
+            <h2>name</h2>
+            <h3>this is the name of the thing you are decorating</h3>
+            <ul>
+              <li class="fragment">For classes this will be undefined</li>
+              <li class="fragment">For methods/properties this will be the method/property name</li>
+            </ul>
+          </section>
+          <section>
+            <h2>descriptor</h2>
+            <h3>this describes the data or accessor you are decorating</h3>
+            <ul>
+              <li class="fragment">For classes this will be undefined</li>
+              <li class="fragment">For methods/properties this will be the descriptor of the method/property you are decorating</li>
+            </ul>
+            <p class="fragment">Same descriptors that are used for Object.defineProperty()</p>
+          </section>
+          <section>
+            <h2>Quick aside on descriptors</h2>
+            <p class="fragment">ES5 feature, part of Object.defineProperty()</p>
+            <p class="fragment">2 types - data & accessor</p>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Data Descriptor</h2>
+            <pre><code data-trim data-noescape>
+{
+  value: 'test', // could be number, object, function
+  configurable: true, // can be deleted if true, defaults to false
+  enumerable: true, // show in for in if true, defaults to false
+  writable: true // can be updated, defaults to false
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Accessor Descriptor</h2>
+            <pre><code data-trim data-noescape>
+{
+  get: function() {
+    return 'test';
+  },
+  set: function(value) {
+    this.value = value;
+  },
+  configurable: true, // can be deleted if true, defaults to false
+  enumerable: true // show in for in if true, defaults to false
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+        </section>
 
-			// Full list of configuration options available at:
-			// https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				controls: true,
-				progress: true,
-				history: true,
-				center: true,
+        <section>
+          <section>
+            <h2>Short story...</h2>
+            <ul>
+              <li class="fragment">Older codebase using Backbone</li>
+              <li class="fragment">Upgrading to es6/2015 with babel</li>
+            </ul>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <p>ES5</p>
+            <pre><code data-trim data-noescape>
+var View = Backbone.View.extend({
+  tagName: 'li',
+  className: 'stuff',
+  events: {
+    'click .btn': 'handleClick'
+  },
+  initialize: function() {},
+  render: function() {},
+  handleClick: function() {}
+});
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <p>ES6/2015</p>
+            <pre><code data-trim data-noescape>
+class View extends Backbone.View {
+  get tagName() {
+    return 'li';
+  }
+  get className() {
+    return 'stuff';
+  }
+  get events() {
+    return {
+      'click .btn': 'handleClick'
+    };
+  }
+  initialize() {}
+  render() {}
+  handleClick() {}
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Backbone & ES6/2015 don't quite go together</h2>
+            <ul>
+              <li class="fragment">not totally compatible</li>
+              <li class="fragment">ES6/2015 class issues</li>
+              <li class="fragment">class properties help, but not enough</li>
+              <li class="fragment">didn't like the syntax</li>
+            </ul>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Went on vacation...</h2>
+            <ul>
+              <li class="fragment">typescript</li>
+              <li class="fragment">decorators</li>
+            </ul>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Backbone Code</h2>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <p>go from this</p>
+            <pre><code data-trim data-noescape>
+class View extends Backbone.View {
+  get tagName() {
+    return 'li';
+  }
 
-				transition: 'slide', // none/fade/slide/convex/concave/zoom
+  get className() {
+    return 'stuff';
+  }
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <p>to this</p>
+            <pre><code data-trim data-noescape>
+import { tagName, className } from 'decorators';
 
-				// Optional reveal.js plugins
-				dependencies: [
-					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
-					{ src: 'plugin/zoom-js/zoom.js', async: true },
-					{ src: 'plugin/notes/notes.js', async: true }
-				]
-			});
+@tagName('li')
+@className('stuff')
+class View extends Backbone.View {}
+            </code></pre>
+            <p class="fragment">(more on multiple decorators in a second)</p>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <p>go from this</p>
+            <pre><code data-trim data-noescape>
+class View extends Backbone.View {
+  get events() {
+    return {
+      'click .btn': 'handleClick',
+      'keypress input': 'handleKeyPress'
+    };
+  }
 
-		</script>
+  handleClick {}
 
-	</body>
+  handleKeypress {}
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <p>to this</p>
+            <pre><code data-trim data-noescape>
+import { on } from 'decorators';
+
+class View extends Backbone.View {
+  @on('click .btn')
+  handleClick {}
+
+  @on('click input')
+  handleKeypress {}
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Multiple decorators</h2>
+            <p>Order matters</p>
+            <p class="fragment">evaluated top to bottom, executed bottom to top</p>
+            <pre class="fragment"><code data-trim data-noescape>
+@F
+@G
+function foo() {}
+
+F(G(foo()))
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Decorator examples</h2>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Backbone Decorators</h2>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>classname</h2>
+            <p>Sets the classname on the prototype</p>
+            <pre><code data-trim data-noescape>
+import { className } from 'decorators';
+
+@className('stuff')
+class View extends Backbone.View {}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>how?</h2>
+            <pre><code data-trim data-noescape>
+export function className(value) {
+  return function(target) {
+    target.prototype.className = value;
+  };
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>on</h2>
+            <p>Sets an event trigger on the method</p>
+            <pre><code data-trim data-noescape>
+import { on } from 'decorators';
+
+class View extends Backbone.View {
+  @on('click .btn')
+  class handleClick {}
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>how?</h2>
+            <pre><code data-trim data-noescape>
+export function on(eventName) {
+  return function(target, name, descriptor) {
+    if (!target.events) {
+      target.events = {};
+    }
+    target.events[eventName] = name;
+  };
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <!--<section>
+            <h2>Backbone Mixins</h2>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>maintain state</h2>
+            <p>Adds functions for saving and storing state</p>
+            <pre><code data-trim data-noescape>
+import { maintainState } from 'decorators';
+
+@maintainState
+class Model extends Backbone.Model {}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>how?</h2>
+            <pre><code data-trim data-noescape>
+export function maintainState(target) {
+  Object.assign(target.prototype, {
+    save,
+    saveState,
+    restoreState,
+    hasStateChanged
+  });
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>hide</h2>
+            <p>Adds functions for filtering models and views that are part of a collection</p>
+            <pre><code data-trim data-noescape>
+import { hideableModel, hideableCollection, hideableView } from 'decorators';
+
+@hideableModel
+class Model extends Backbone.Model {}
+
+@hideableCollection
+class Collection extends Backbone.Collection {}
+
+@hideableView
+class View extends Backbone.View {}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>how?</h2>
+            <pre><code data-trim data-noescape>
+export function hideableModel(target) {
+  target.prototype._visible = true;
+  Object.defineProperty(target.prototype, 'visible', {
+    set: function setVisibility(visible) {
+      if (this._visible !== visible) {
+        this._visible = visible;
+        this.trigger(visible ? 'shown' : 'hidden', this);
+      }
+    },
+    get: function getVisibility() {
+      return this._visible;
+    }
+  });
+}
+
+export function hideableCollection(target) {
+  const originalInit = target.prototype.initialize;
+  const initializeWrap = function initializeWrap(...args) {
+    originalInit.apply(this, args);
+    this.listenTo(this, 'sync', (type) => {
+      // only pay attention to collection sync events
+      if (type instanceof Collection) {
+        this.filterVisibility();
+      }
+    });
+  };
+  Object.assign(target.prototype, {
+    filterVisibility,
+    initialize: initializeWrap
+  });
+}
+
+export function hideableView(target) {
+  const originalInit = target.prototype.initialize;
+  const initializeWrap = function initializeWrap(...args) {
+    originalInit.apply(this, args);
+    this.listenTo(this.model, 'hidden', this._addHidden);
+    this.listenTo(this.model, 'shown', this._removeHidden);
+  };
+
+  const originalRender = target.prototype.render;
+  const renderWrap = function renderWrap(...args) {
+    const originalValue = originalRender.apply(this, args);
+    if (!this.model.visible) {
+      this._addHidden();
+    }
+    return originalValue;
+  };
+
+  Object.assign(target.prototype, {
+    _addHidden,
+    _removeHidden,
+    initialize: initializeWrap,
+    render: renderWrap
+  });
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>-->
+          <section>
+            <h2>Core-Decorators</h2>
+            <p>great decorator library meant to be used with the babel-legacy plugin</p>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>autobind</h2>
+            <p>Binds the class to 'this' for the method or class</p>
+            <pre><code data-trim data-noescape>
+import { autobind } from 'core-decorators';
+
+class test {
+  @autobind
+  handleEvent() {
+    // 'this' is the class
+  }
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>debounce</h2>
+            <p>Creates a new debounced method that will wait the given time in ms before executing again</p>
+            <pre><code data-trim data-noescape>
+import { debounce } from 'core-decorators';
+
+class test {
+  content = '';
+  @debounce(500)
+  updateContent(content) {
+    this.content = content;
+  }
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>deprecate</h2>
+            <p>Calls console.warn() with a deprecation message.</p>
+            <pre><code data-trim data-noescape>
+import { deprecate } from 'core-decorators';
+
+class test {
+  @deprecate('stop using this')
+  oldMethod() {
+    // do stuff
+  }
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Apply Decorators Helper</h2>
+            <p>Applies decorators without transpiling</p>
+            <pre><code data-trim data-noescape>
+import { applyDecorators } from 'core-decorators';
+
+class Foo {
+  getFoo() {
+    return this;
+  }
+}
+
+applyDecorators(Foo, {
+  getFoo: [autobind]
+});
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Lessons learned</h2>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Remember the exisiting descriptor</h2>
+            <pre><code data-trim data-noescape>
+export function wrap(target, key, descriptor) {
+  const originalFn = descriptor.value;
+
+  descriptor.value = function(...args) {
+    // do something before
+    const ret = originalFn.apply(this, args);
+    // do something after
+    return ret;
+  };
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Avoid collisions</h2>
+            <pre><code data-trim data-noescape>
+export function maintainState(target) {
+  Object.assign(target.prototype, {
+    save,
+    saveState,
+    restoreState,
+    hasStateChanged
+  });
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h2>Use function keyword</h2>
+            <pre><code data-trim data-noescape>
+export function wrap(target, key, descriptor) {
+  const originalFn = descriptor.value;
+
+  descriptor.value = function(...args) {
+    // do something before
+    const ret = originalFn.apply(this, args);
+    // do something after
+    return ret;
+  };
+}
+            </code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <h1>THE END</h1>
+          <p>
+            <small>Presentation online at <a href="http://nmackey.com/presentation-decorators/">nmackey.com/presentation-decorators/</a></small>
+            <small>Slides available at <a href="http://github.com/nmackey/presentation-decorators">github.com/nmackey/presentation-decorators</a></small>
+          </p>
+          <p>
+            <small>Web: <a href="http://nmackey.com">nmackey.com</a> / Twitter: <a href="http://twitter.com/nicholas_mackey">@nicholas_mackey</a> / Github: <a href="http://github.com/nmackey">nmackey</a></small>
+          </p>
+        </section>
+
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
 </html>
