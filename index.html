@@ -103,7 +103,9 @@
               <li class="fragment">that evaluates to a function</li>
               <li class="fragment">that takes 3 arguments: target, name, and descriptor (same signature as Object.defineProperty)
                 <pre><code data-trim data-noescape>
-                  function(target, name, descriptor){}
+function someDecorator() {
+  returns function(target, name, descriptor){};
+}
                 </code></pre>
               </li>
               <li class="fragment">and optionally returns a decorator descriptor to install on the target object</li>
@@ -193,7 +195,9 @@ export function readonly(target, name, descriptor){
           <section>
             <h2>Parts of a decorator:</h2>
             <pre><code data-trim data-noescape>
-              function(target, name, descriptor){}
+function someDecorator() {
+  returns function(target, name, descriptor){};
+}
             </code></pre>
           </section>
           <section>
@@ -201,7 +205,7 @@ export function readonly(target, name, descriptor){
             <h3>this is the thing you are decorating</h3>
             <ul>
               <li class="fragment">For classes this will be the class constructor</li>
-              <li class="fragment">For methods/properties this will be the prototype</li>
+              <li class="fragment">For methods/properties this will be the class prototype</li>
             </ul>
           </section>
           <section>
@@ -258,6 +262,30 @@ export function readonly(target, name, descriptor){
             <aside class="notes">
             </aside>
           </section>
+          <section>
+            <h2>Example</h2>
+            <pre><code data-trim data-noescape>
+import { decorator } from 'decorators';
+
+class foo {
+  @decorator
+  bar() {}
+}
+            </code></pre>
+            <pre><code data-trim data-noescape>
+// target: class prototype
+// name: 'bar'
+// descriptor: {
+//   value: bar,
+//   writable: true,
+//   enumerable: false,
+//   configurable: true
+// }
+export function decorator(target, name, descriptor) {
+  // do stuff
+};
+            </code></pre>
+          </section>
         </section>
 
         <section>
@@ -265,7 +293,7 @@ export function readonly(target, name, descriptor){
             <h2>Short story...</h2>
             <ul>
               <li class="fragment">Older codebase using Backbone</li>
-              <li class="fragment">Upgrading to es6/2015 with babel</li>
+              <li class="fragment">Upgrading to ES6/2015 with babel</li>
             </ul>
             <aside class="notes">
             </aside>
@@ -323,6 +351,7 @@ class View extends Backbone.View {
           </section>
           <section>
             <h2>Went on vacation...</h2>
+            <p class="fragment">Decided to look into two things</p>
             <ul>
               <li class="fragment">typescript</li>
               <li class="fragment">decorators</li>
@@ -331,7 +360,7 @@ class View extends Backbone.View {
             </aside>
           </section>
           <section>
-            <h2>Backbone Code</h2>
+            <h2>Some Code...</h2>
             <aside class="notes">
             </aside>
           </section>
@@ -404,9 +433,11 @@ class View extends Backbone.View {
             <p>Order matters</p>
             <p class="fragment">evaluated top to bottom, executed bottom to top</p>
             <pre class="fragment"><code data-trim data-noescape>
-@F
-@G
-function foo() {}
+class Bar {
+  @F
+  @G
+  foo() {}
+}
 
 F(G(foo()))
             </code></pre>
@@ -458,7 +489,7 @@ import { on } from 'decorators';
 
 class View extends Backbone.View {
   @on('click .btn')
-  class handleClick {}
+  handleClick {}
 }
             </code></pre>
             <aside class="notes">
@@ -468,7 +499,7 @@ class View extends Backbone.View {
             <h2>how?</h2>
             <pre><code data-trim data-noescape>
 export function on(eventName) {
-  return function(target, name, descriptor) {
+  return function(target, name) {
     if (!target.events) {
       target.events = {};
     }
@@ -593,7 +624,7 @@ export function hideableView(target) {
             </aside>
           </section>-->
           <section>
-            <h2>Core-Decorators</h2>
+            <h2><a href="https://github.com/jayphelps/core-decorators.js">Core-Decorators</a></h2>
             <p>great decorator library meant to be used with the babel-legacy plugin</p>
             <aside class="notes">
             </aside>
@@ -677,15 +708,8 @@ applyDecorators(Foo, {
           <section>
             <h2>Remember the exisiting descriptor</h2>
             <pre><code data-trim data-noescape>
-export function wrap(target, key, descriptor) {
-  const originalFn = descriptor.value;
-
-  descriptor.value = function(...args) {
-    // do something before
-    const ret = originalFn.apply(this, args);
-    // do something after
-    return ret;
-  };
+export function decorator(target, name, descriptor) {
+  // modify the existing descriptor
 }
             </code></pre>
             <aside class="notes">
@@ -709,14 +733,10 @@ export function maintainState(target) {
           <section>
             <h2>Use function keyword</h2>
             <pre><code data-trim data-noescape>
-export function wrap(target, key, descriptor) {
-  const originalFn = descriptor.value;
-
-  descriptor.value = function(...args) {
-    // do something before
-    const ret = originalFn.apply(this, args);
-    // do something after
-    return ret;
+export function decorator() {
+  return function(target, name, descriptor) {
+    // you want the context of this function to
+    // be the same as the method you are decorating
   };
 }
             </code></pre>
@@ -729,10 +749,11 @@ export function wrap(target, key, descriptor) {
           <h1>THE END</h1>
           <p>
             <small>Presentation online at <a href="http://nmackey.com/presentation-decorators/">nmackey.com/presentation-decorators/</a></small>
-            <small>Slides available at <a href="http://github.com/nmackey/presentation-decorators">github.com/nmackey/presentation-decorators</a></small>
+            <small>Slides available at <a href="https://github.com/nmackey/presentation-decorators">github.com/nmackey/presentation-decorators</a></small>
+            <small>Example code available at <a href="https://github.com/nmackey/presentation-decorators-examples">github.com/nmackey/presentation-decorators-examples</a></small>
           </p>
           <p>
-            <small>Web: <a href="http://nmackey.com">nmackey.com</a> / Twitter: <a href="http://twitter.com/nicholas_mackey">@nicholas_mackey</a> / Github: <a href="http://github.com/nmackey">nmackey</a></small>
+            <small>Web: <a href="http://nmackey.com">nmackey.com</a> / Twitter: <a href="https://twitter.com/nicholas_mackey">@nicholas_mackey</a> / Github: <a href="https://github.com/nmackey">nmackey</a></small>
           </p>
         </section>
 
